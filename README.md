@@ -1,78 +1,153 @@
-Transformer Fine-Tuning for CEO Call Forward-Looking Classification and Drift Tracking
-Overview
+📊 Transformer Fine-Tuning for CEO Call Semantic Drift Analysis
 
-This project builds an end-to-end deep learning pipeline to analyze CEO earnings call transcripts by extracting forward-looking statements, fine-tuning transformer-based sentence embeddings, and tracking semantic drift over time.
 
-The primary goal is representation learning, not prediction. We improve sentence embeddings so they better reflect domain-specific semantic structures derived from weak labels.
 
-Key Features
-Weak labeling of forward-looking sentences using LLMs
-Transformer fine-tuning for label-aware embeddings
-Clustering-based topic modeling
-Quarter-level semantic drift tracking
-Label-aware analysis (focus, timeframe, certainty, stance)
-Pipeline Architecture
-Phase 1: Forward-Looking Sentence Extraction & Weak Labeling
-Extract forward-looking sentences using an LLM (Meta Llama 3 via Ollama)
+
+
+
+
+
+🚀 Overview
+
+This project builds an end-to-end NLP pipeline to analyze CEO earnings call transcripts by:
+
+Extracting forward-looking statements
+Applying LLM-based weak labeling
+Fine-tuning a transformer sentence encoder
+Tracking semantic drift over time (quarter-level trends)
+
+Unlike traditional NLP tasks, this project focuses on improving embedding quality (representation learning) rather than prediction.
+
+🎯 Problem Statement
+
+Generic sentence embeddings fail to capture domain-specific meaning in financial text.
+
+👉 This project answers:
+
+Can we fine-tune embeddings so they reflect structured business signals like strategy, certainty, and market stance?
+
+🧠 Approach
+🔹 Phase 1: Weak Labeling (LLM-powered)
+Model: Meta Llama 3 (via Ollama)
+Extract only forward-looking sentences
 Assign structured labels:
 strategic_focus
 temporal_framing
 certainty_level
 market_position
-Output: Clean, labeled sentence-level dataset
-Phase 2: Transformer Fine-Tuning
-Base model: sentence-transformers/all-MiniLM-L6-v2
-Objective: Improve embedding alignment with label structure
+🔹 Phase 2: Transformer Fine-Tuning
+Base Model: all-MiniLM-L6-v2
+Objective: Label-aware embedding alignment
 Method:
-Contrastive learning using label signatures
-In-batch negative sampling
-Evaluation:
+Contrastive learning
+In-batch negatives
+Label signature grouping
+
+📈 Evaluation:
+
 Loss convergence
-Label-alignment improvement
-Clustering quality (Silhouette, CH, DB)
+Label alignment improvement
+Clustering quality metrics
 UMAP / t-SNE visualization
-Phase 3: Clustering & Semantic Drift Tracking
-KMeans clustering (K=30) on embeddings
-Quarter-wise aggregation:
-Cluster counts (volume)
-Cluster shares (composition)
-Label-specific drilldowns (e.g., AI focus trends)
-Dataset
-Source: Apple earnings call transcripts (2014–2025)
-Size:
-~40+ quarters
-~50,000 sentence-level records
-Features:
+🔹 Phase 3: Semantic Drift Tracking
+Clustering: KMeans (K=30)
+Time-based aggregation:
+Cluster volume (counts)
+Cluster composition (shares)
+
+📊 Output:
+
+Topic evolution over quarters
+Label-specific trend analysis (e.g., AI focus)
+📂 Repository Structure
+📦 ceo-semantic-drift-analysis
+ ┣ 📁 data
+ ┃ ┣ raw_transcripts/
+ ┃ ┣ processed_sentences/
+ ┃ ┗ labeled_data/
+ ┣ 📁 notebooks
+ ┃ ┣ 01_extraction_labeling.ipynb
+ ┃ ┣ 02_finetuning.ipynb
+ ┃ ┗ 03_drift_analysis.ipynb
+ ┣ 📁 src
+ ┃ ┣ data_processing.py
+ ┃ ┣ labeling.py
+ ┃ ┣ training.py
+ ┃ ┣ clustering.py
+ ┃ ┗ evaluation.py
+ ┣ 📁 outputs
+ ┃ ┣ embeddings/
+ ┃ ┣ clusters/
+ ┃ ┗ visualizations/
+ ┣ requirements.txt
+ ┗ README.md
+📊 Dataset
+Source: Apple earnings call transcripts
+Timeframe: 2014–2025 (~40+ quarters)
+Size: ~50,000 sentence-level records
+
+Each record contains:
+
 Sentence text
 Quarter metadata
 Weak labels (4 dimensions)
-Embeddings (384-dimensional)
-Results
-Improved label alignment after fine-tuning
-More coherent embedding space vs baseline
-Stable and interpretable clusters
-Clear semantic drift patterns across quarters
-Example insight:
-AI-related discussions become more concentrated into fewer clusters over time
-Tech Stack
-Python
-PyTorch / Sentence Transformers
-Scikit-learn (KMeans, metrics)
-UMAP & t-SNE for visualization
-Ollama (LLM inference)
-Pandas / NumPy
-Key Learnings
-Weak labels can effectively guide representation learning
-Fine-tuning improves semantic structure even without explicit prediction tasks
-Embeddings can be used to track temporal shifts in meaning, not just similarity
-Label-aware evaluation is more useful than generic clustering metrics
-Limitations
+Embedding vectors (384-dim)
+📈 Key Results
+
+✅ Improved label-alignment after fine-tuning
+✅ More coherent embedding space vs baseline
+✅ Stable and interpretable clusters
+✅ Clear semantic drift patterns over time
+
+💡 Example Insight:
+
+AI-related discussions become more concentrated into fewer semantic clusters in later years, indicating strategic consolidation.
+
+🛠️ Tech Stack
+Languages: Python
+Deep Learning: PyTorch, Sentence Transformers
+ML Tools: Scikit-learn
+Visualization: UMAP, t-SNE
+LLM Integration: Ollama (Llama 3)
+Data: Pandas, NumPy
+⚙️ Installation
+git clone https://github.com/your-username/ceo-semantic-drift-analysis.git
+cd ceo-semantic-drift-analysis
+
+pip install -r requirements.txt
+▶️ Usage
+1. Run Weak Labeling
+python src/labeling.py
+2. Fine-Tune Model
+python src/training.py
+3. Run Drift Analysis
+python src/clustering.py
+🧪 Evaluation Metrics
+Silhouette Score
+Calinski-Harabasz Index
+Davies-Bouldin Score
+Label Alignment Metrics
+⚠️ Limitations
 Weak labels introduce noise
 Single-company dataset limits generalization
 Clustering is not ground truth
-Sensitive to label imbalance and prompt design
-Future Work
-Extend to multi-company, multi-sector datasets
-Improve label calibration and validation
-Explore domain-adaptive pretraining
-Experiment with dynamic clustering over time
+Sensitive to label imbalance
+🔮 Future Work
+Multi-company, multi-sector expansion
+Domain-adaptive pretraining
+Better label calibration
+Dynamic clustering methods
+📜 Disclaimer
+
+This project is for educational purposes only and does not constitute financial or investment advice.
+
+👩‍💻 Contributors
+Isha Prakash Kadam
+Dujun Zhai
+Yifeng Qiu
+
+Instructor: Christopher Dunham
+
+⭐ If you found this useful
+
+Give it a star ⭐ and feel free to connect!
